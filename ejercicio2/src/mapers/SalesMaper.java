@@ -1,5 +1,6 @@
 package mapers;
 
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.MapReduceBase;
@@ -10,24 +11,23 @@ import org.apache.hadoop.mapred.Reporter;
 import java.io.IOException;
 import java.util.Objects;
 
-public class SalesMaper extends MapReduceBase implements Mapper<LongWritable,Text, Text,Text> {
+public class SalesMaper extends MapReduceBase implements Mapper<LongWritable,Text, Text,LongWritable> {
     
-    public void map(LongWritable key, Text value, OutputCollector<Text,Text> output, Reporter reporter) throws IOException{
+    public void map(LongWritable key, Text value, OutputCollector<Text,LongWritable> output, Reporter reporter) throws IOException{
         String line = value.toString();
 
         String values[] = line.split(","); // [2015,926,Dirección Administración y Otros Órganos de Apoyo,0,Remuneraciones,00101,Sueldos para cargos fijos ,15356701298,00]
         // Ocupo acceder al valor 2 del arreglo para determinar a cuál división del poder judicial pertenece.
-        Text division = new Text(values[2]);
+        Text partida = new Text(values[4]);
         // Para obtener el monto es mediante el indice 7 y para dar un mayor detalle pasamos el indice 6
         // hay lagunos valores que tienen "" en vez de 0 y para evitar errores asignamos un default de 0
         if (Objects.equals(values[7], "")){
             values[7]= "0";
         }
-        String texto = values[6]+":"+values[7];
 
-        Text amount = new Text(texto);
+        LongWritable amount = new LongWritable(Long.parseLong(values[7]));
 
-        output.collect(division, amount);
+        output.collect(partida, amount);
         /*
         String values[] = line.split(",");  
         String year = values[0].split("/")[2];
