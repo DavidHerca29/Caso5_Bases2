@@ -1,5 +1,26 @@
 
 // comandos caso 5
 
+docker start hadoopserver
 
+docker exec -it hadoopserver bash
 
+ssh "hadoopuser@localhost"
+
+start-all.sh
+
+cd mapr
+
+hadoop fs -ls /
+
+hadoop fs -ls /datainput
+
+hadoop jar caso5parte1.jar mapr.maprunner
+
+hadoop fs -cat /dataoutput/part-00000
+
+hadoop jar caso5parte2.jar mapr.maprunner
+
+hadoop fs -cat /dataoutput2/part-00000
+
+stop-all.sh
