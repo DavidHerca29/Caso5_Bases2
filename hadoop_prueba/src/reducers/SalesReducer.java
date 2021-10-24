@@ -16,7 +16,6 @@ public class SalesReducer extends MapReduceBase implements Reducer<Text,Text,Tex
 		long amount1=0;
 		long amount2=0;
 		long amount3=0;
-		long montoTotoal=0;
 		String resultado1 = "";
 		String resultado2 = "";
 		String resultado3 = "";
